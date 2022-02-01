@@ -22,7 +22,7 @@ function App() {
         ref={output}
         src='https://www.myinstants.com/media/sounds/discord-notification.mp3'
       ></audio>
-      <h1 className='text-7xl'>test</h1>
+      <h1 className='text-7xl'>s</h1>
     </div>
   )
 }

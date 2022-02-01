@@ -31,23 +31,7 @@ function createWindow() {
       ),
     })
 
-    console.log('WOWZERS')
-
     win.webContents.openDevTools()
-
-    // Hot Reloading on 'node_modules/.bin/electronPath'
-    require('electron-reload')(__dirname, {
-      electron: path.join(
-        __dirname,
-        '..',
-        '..',
-        'node_modules',
-        '.bin',
-        'electron.cmd'
-      ),
-      forceHardReset: true,
-      hardResetMethod: 'exit',
-    })
   }
 }
 
