@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react'
 import { getDevices, ExtendedAudioElement } from './util/AudioDevices'
+import { ipcRenderer } from 'electron'
 
 function App() {
   const output = useRef<ExtendedAudioElement>(null)
 
   useEffect(() => {
+    console.log(ipcRenderer.sendSync('synchronous-message', 'ping'))
     ;(async function () {
       let devices = await getDevices()
 

@@ -20,9 +20,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "electron:watch": "nodemon --exec electron .",
     "electron:dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && tsc -p src/plugins/electron -w\" \"wait-on http://localhost:3000 && tsc -p src/plugins/electron && npm run electron:watch\"",
@@ -53,6 +53,7 @@
     "electron": "^16.0.8",
     "electron-reload": "^2.0.0-alpha.1",
     "postcss": "^8.4.5",
+    "react-app-rewired": "^2.1.11",
     "tailwindcss": "^3.0.18",
     "wait-on": "^6.0.0"
   }
