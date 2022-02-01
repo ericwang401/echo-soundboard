@@ -1,8 +1,33 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+
+interface ExtendedAudioElement extends HTMLAudioElement {
+  setSinkId(id: string): void;
+}
 
 function App() {
+  const output = useRef<ExtendedAudioElement>(null)
+
+  useEffect(() => {
+    ;(async function () {
+      let devices = await navigator.mediaDevices.enumerateDevices()
+      const audioDevices = devices.filter(
+        (device) => device.kind === 'audiooutput'
+      )
+
+      console.log(audioDevices)
+      await output.current?.setSinkId(audioDevices[3].deviceId)
+
+      output.current?.play()
+
+    })()
+  }, [])
+
   return (
     <div>
+      <audio
+        ref={output}
+        src='https://www.myinstants.com/media/sounds/discord-notification.mp3'
+      ></audio>
       <h1 className='text-7xl'>test</h1>
     </div>
   )

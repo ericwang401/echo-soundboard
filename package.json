@@ -2,6 +2,7 @@
   "name": "echo",
   "version": "0.1.0",
   "private": true,
+  "main": "build/electron/main.js",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
@@ -10,6 +11,7 @@
     "@types/node": "^16.11.21",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
+    "electron-devtools-installer": "^3.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
@@ -20,7 +22,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron:dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && tsc -p src/plugins/electron -w\" \"wait-on http://localhost:3000 && tsc -p src/plugins/electron && electron .\"",
+    "electron:build": "npm build && tsc -p electron && electron-builder"
   },
   "eslintConfig": {
     "extends": [
@@ -42,8 +46,12 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.2",
+    "concurrently": "^7.0.0",
+    "cross-env": "^7.0.3",
     "electron": "^16.0.8",
+    "electron-reload": "^2.0.0-alpha.1",
     "postcss": "^8.4.5",
-    "tailwindcss": "^3.0.18"
+    "tailwindcss": "^3.0.18",
+    "wait-on": "^6.0.0"
   }
 }
