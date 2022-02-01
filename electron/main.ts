@@ -3,6 +3,7 @@ import * as path from 'path'
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer'
+import './events'
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -19,6 +20,18 @@ function createWindow() {
     win.loadURL(`file://${__dirname}/../index.html`)
   } else {
     win.loadURL('http://localhost:3000/index.html')
+    console.log('test', __dirname, {
+      cmd: path.join(
+        __dirname,
+        '..',
+        '..',
+        'node_modules',
+        '.bin',
+        'electron'
+      ),
+    })
+
+    console.log('WOWZERS')
 
     win.webContents.openDevTools()
 
@@ -30,7 +43,7 @@ function createWindow() {
         '..',
         'node_modules',
         '.bin',
-        'electron' + (process.platform === 'win32' ? '.cmd' : '')
+        'electron.cmd'
       ),
       forceHardReset: true,
       hardResetMethod: 'exit',

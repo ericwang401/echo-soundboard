@@ -1,21 +1,15 @@
 import React, { useEffect, useRef } from 'react'
-
-interface ExtendedAudioElement extends HTMLAudioElement {
-  setSinkId(id: string): void;
-}
+import { getDevices, ExtendedAudioElement } from './util/AudioDevices'
 
 function App() {
   const output = useRef<ExtendedAudioElement>(null)
 
   useEffect(() => {
     ;(async function () {
-      let devices = await navigator.mediaDevices.enumerateDevices()
-      const audioDevices = devices.filter(
-        (device) => device.kind === 'audiooutput'
-      )
+      let devices = await getDevices()
 
-      console.log(audioDevices)
-      await output.current?.setSinkId(audioDevices[3].deviceId)
+      console.log(devices)
+      await output.current?.setSinkId(devices[0].deviceId)
 
       output.current?.play()
 
