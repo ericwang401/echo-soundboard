@@ -48,7 +48,7 @@ const Outputs = () => {
             <div>
               <p className='text-sm'>Primary Output</p>
               <Dropdown
-                className='w-72'
+                className='w-80'
                 value={primaryOutput}
                 items={outputs}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) =>
@@ -60,7 +60,7 @@ const Outputs = () => {
             <div>
               <p className='text-sm'>Secondary Output</p>
               <Dropdown
-                className='w-72'
+                className='w-80'
                 value={secondaryOutput}
                 items={outputs}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) =>
