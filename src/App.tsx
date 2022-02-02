@@ -11,12 +11,19 @@ const App = () => {
   console.log(ipcRenderer.sendSync('list-files', 'C:\\Users\\Eric Wang\\Music'))
 
   console.log(outputs)
+
+  const getNewFolder = () => {
+    console.log(ipcRenderer.sendSync('get-new-folder'))
+  }
   return (
     <Container>
-      <div className='grid grid-cols-3 gap-4 content py-4'>
-        <AudioCard name='chamber' />
-        <AudioCard name='chamber' />
-        <AudioCard name='chamber' />
+      <div className='content'>
+        <button onClick={() => getNewFolder()}>open dialog</button>
+        <div className='grid grid-cols-3 lg:grid-cols-4 gap-4 py-4'>
+          <AudioCard name='chamber' />
+          <AudioCard name='chamber' />
+          <AudioCard name='chamber' />
+        </div>
       </div>
     </Container>
   )

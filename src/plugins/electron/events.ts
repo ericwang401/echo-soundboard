@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron'
+import { ipcMain, dialog } from 'electron'
 import * as path from 'path'
 import * as mime from 'mime'
 import * as fs from 'fs'
@@ -35,11 +35,19 @@ ipcMain.on('synchronous-message', (event, arg) => {
 })
 
 ipcMain.on('list-files', (event, directory) => {
-
   listFiles(directory).then((files) => {
     event.returnValue = {
       dir: directory,
       files
     }
   })
+})
+
+ipcMain.on('get-new-folder', (event, directory) => {
+  dialog.showOpenDialog({properties: ['openDirectory']})
+    .then((folder) => {
+      event.returnValue = folder
+    }).catch(err => {
+      console.log(err)
+    })
 })
