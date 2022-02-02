@@ -14,9 +14,9 @@ const FileDirectory = () => {
 
   const getNewFolder = () => {
     let directory = ipcRenderer.sendSync('get-new-folder')
-    if (directory.cancelled) return
-
-    setFileDirectory(directory.filePaths[0])
+    if (!directory.canceled) {
+      setFileDirectory(directory.filePaths[0])
+    }
   }
 
   return (

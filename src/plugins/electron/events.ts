@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as mime from 'mime'
 import * as fs from 'fs'
 
-interface File {
+export interface File {
   name: string;
   path: string;
 }
@@ -40,6 +40,8 @@ ipcMain.on('list-files', (event, directory) => {
       dir: directory,
       files
     }
+  }).catch(() => {
+    event.returnValue = []
   })
 })
 

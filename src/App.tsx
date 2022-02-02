@@ -1,29 +1,41 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Container from '@/components/Container'
 import AudioCard from '@/components/AudioCard'
 import { useStoreState } from 'easy-peasy'
 import { Store } from '@/state'
 import { ipcRenderer } from 'electron'
+import { File } from '@/plugins/electron/events'
 
 const App = () => {
-  const outputs = useStoreState((state: Store) => state.outputs)
+  const [outputs, directory] = useStoreState((state: Store) => [
+    state.outputs,
+    state.fileDirectory,
+  ])
 
-  console.log(ipcRenderer.sendSync('list-files', 'C:\\Users\\Eric Wang\\Music'))
+  const [files, setFiles] = useState<File[]>([])
 
-  console.log(outputs)
+  useEffect(() => {
+    try {
+      setFiles(ipcRenderer.sendSync('list-files', directory).files)
+    } catch (e) {}
+  }, [directory])
 
-  const getNewFolder = () => {
-    console.log(ipcRenderer.sendSync('get-new-folder'))
-  }
   return (
     <Container>
-      <div className='content'>
-        <button onClick={() => getNewFolder()}>open dialog</button>
-        <div className='grid grid-cols-3 lg:grid-cols-4 gap-4 py-4'>
-          <AudioCard name='chamber' />
-          <AudioCard name='chamber' />
-          <AudioCard name='chamber' />
-        </div>
+      <div className='content h-full w-full'>
+        { files &&
+          <div className='grid grid-cols-3 lg:grid-cols-4 gap-4 py-4'>
+            {files.map((file: File) => (
+              <AudioCard key={file.path} name={file.name} />
+            ))}
+          </div>
+        }
+        {
+          (!files || files.length === 0) &&
+          <div className='grid h-full w-full place-items-center'>
+            <h3 className='text-xl font-semibold'>No Sound Tracks :(</h3>
+          </div>
+        }
       </div>
     </Container>
   )
