@@ -20,17 +20,14 @@ function createWindow() {
     // 'build/index.html'
     win.loadURL(`file://${__dirname}/../index.html`)
   } else {
-    win.loadURL('http://localhost:3000/index.html')
+    win.loadURL('http://localhost:3000/')
     console.log('test', __dirname, {
-      cmd: path.join(
-        __dirname,
-        '..',
-        '..',
-        'node_modules',
-        '.bin',
-        'electron'
-      ),
+      cmd: path.join(__dirname, '..', '..', 'node_modules', '.bin', 'electron'),
     })
+
+    try {
+      require('electron-reloader')(module)
+    } catch {}
 
     win.webContents.openDevTools()
   }
