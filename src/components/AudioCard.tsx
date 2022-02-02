@@ -1,14 +1,27 @@
+import { Store } from '@/state'
+import { ExtendedAudioElement } from '@/util/AudioDevices'
 import { VolumeUpIcon, PlayIcon, DotsVerticalIcon } from '@heroicons/react/outline'
+import { useStoreState } from 'easy-peasy'
 
 interface AudioCardProps {
   name: string
+  path: string
 }
 
 const AudioCard = (props: AudioCardProps) => {
+  const [primaryOutput, secondaryOutput] = useStoreState((state: Store) => [state.outputs.primary, state.outputs.secondary])
+  const play = async () => {
+    let primary = new Audio(props.path) as ExtendedAudioElement
+    console.log(primaryOutput, primary, props.path)
+    //primary.src = props.path
+    await primary.setSinkId(primaryOutput)
+    primary.play()
+  }
+
   return (
     <div className='relative flex items-center bg-black border-neutral-700 border rounded-md p-4 overflow-hidden whitespace-nowrap'>
       <div className='grid place-items-center absolute w-full h-full -ml-4 transition-opacity opacity-0 hover:opacity-100 bg-gray-800 rounded-md'>
-        <div className="absolute cursor-pointer inset-0 pointe opacity-0" onClick={() => alert('test')}></div>
+        <div className="absolute cursor-pointer inset-0 pointe opacity-0" onClick={() => play()}></div>
         <div className='grid grid-cols-3 w-full'>
           <div className='col-start-2 flex justify-center items-center'>
             <PlayIcon className='w-7 h-7' />

@@ -26,7 +26,7 @@ const App = () => {
         { files &&
           <div className='grid grid-cols-3 lg:grid-cols-4 gap-4 py-4'>
             {files.map((file: File) => (
-              <AudioCard key={file.path} name={file.name} />
+              <AudioCard key={file.path} name={file.name} path={file.path} />
             ))}
           </div>
         }
