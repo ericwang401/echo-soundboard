@@ -33,7 +33,7 @@
     "eject": "react-scripts eject",
     "electron:watch": "nodemon --exec electron .",
     "electron:dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && tsc -p src/plugins/electron -w\" \"wait-on http://localhost:3000 && tsc -p src/plugins/electron && npm run electron:watch\"",
-    "electron:build": "npm build && tsc -p electron && electron-builder"
+    "electron:build": "npm run build && tsc -p src/plugins/electron && electron-builder"
   },
   "eslintConfig": {
     "extends": [
