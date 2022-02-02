@@ -6,10 +6,10 @@ interface AudioCardProps {
 
 const AudioCard = (props: AudioCardProps) => {
   return (
-    <div className='relative flex items-center bg-black border-neutral-800 border rounded-md p-4'>
+    <div className='relative flex items-center bg-black border-neutral-700 border rounded-md p-4'>
       <div className='grid place-items-center absolute w-full h-full -ml-4 transition-opacity opacity-0 hover:opacity-100 bg-gray-800 rounded-md'>
         <div className='grid grid-cols-3 w-full'>
-          <div className='col-start-2 flex items-center'>
+          <div className='col-start-2 flex justify-center items-center'>
             <PlayIcon className='w-7 h-7' />{' '}
             <span className='ml-1.5'>Play</span>
           </div>
