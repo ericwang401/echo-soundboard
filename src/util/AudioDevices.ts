@@ -2,8 +2,8 @@ export interface ExtendedAudioElement extends HTMLAudioElement {
   setSinkId(id: string): void
 }
 
-export const getDevices = async () => {
+export const getDevices = async (showInputs?: boolean) => {
   return (await navigator.mediaDevices.enumerateDevices()).filter(
-    (device) => device.kind === 'audiooutput'
+    (device) => (!showInputs ? device.kind === 'audiooutput' : device.kind === 'audioinput')
   )
 }
