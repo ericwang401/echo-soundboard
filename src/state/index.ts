@@ -4,10 +4,12 @@ export interface Store {
   outputs: OutputsStore;
   microphone: string;
   fileDirectory: string;
+  volumeModifier: number
   setPrimary: Action<Store, string>
   setSecondary: Action<Store, string>
   setFileDirectory: Action<Store, string>
   setMicrophone: Action<Store, string>
+  setVolumeModifier: Action<Store, number>
 }
 
 export interface OutputsStore {
@@ -21,6 +23,7 @@ export const store = createStore<Store>({
     secondary: '',
   },
   microphone: '',
+  volumeModifier: 0,
   fileDirectory: '',
   setPrimary: action((state, payload: string) => {
     state.outputs.primary = payload
@@ -33,5 +36,8 @@ export const store = createStore<Store>({
   }),
   setMicrophone: action((state, payload: string) => {
     state.microphone = payload
+  }),
+  setVolumeModifier: action((state, payload: number) => {
+    state.volumeModifier = payload
   })
 })

@@ -21,12 +21,18 @@ const App = () => {
   let audio = new Audio() as ExtendedAudioElement
 
   useEffect(() => {
+    console.log("it's working!")
     try {
       setFiles(ipcRenderer.sendSync('list-files', directory).files)
     } catch (e) {}
 
     navigator.mediaDevices
-      .getUserMedia({ audio: true })
+      .getUserMedia({
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+        },
+      })
       .then(async function (stream) {
         let aCtx = new AudioContext()
         let microphone = aCtx.createMediaStreamSource(stream)
