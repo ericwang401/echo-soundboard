@@ -6,7 +6,7 @@ import './index.css'
 import App from './App'
 import NavigationBar from './components/NavigationBar'
 import { store } from '@/state'
-import Settings from '@/pages/Settings/SettingsContainer'
+import Settings from '@/pages/settings/SettingsContainer'
 
 ReactDOM.render(
   <React.StrictMode>

@@ -5,6 +5,8 @@ import installExtension, {
 } from 'electron-devtools-installer'
 import './events'
 
+
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,

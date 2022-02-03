@@ -1,7 +1,8 @@
 import Container from '@/components/Container'
-import FileDirectory from '@/pages/Settings/FileDirectory'
-import Microphone from '@/pages/Settings/Microphone'
-import Outputs from '@/pages/Settings/Outputs'
+import AppDataDirectory from '@/pages/settings/AppDataDirectory'
+import FileDirectory from '@/pages/settings/FileDirectory'
+import Microphone from '@/pages/settings/Microphone'
+import Outputs from '@/pages/settings/Outputs'
 
 
 const Settings = () => {
@@ -12,6 +13,7 @@ const Settings = () => {
         <Outputs />
         <FileDirectory />
         <Microphone />
+        <AppDataDirectory />
       </div>
     </Container>
   )

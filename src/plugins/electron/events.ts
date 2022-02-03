@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from 'electron'
+import { ipcMain, dialog, app } from 'electron'
 import * as path from 'path'
 import * as mime from 'mime'
 import * as fs from 'fs'
@@ -29,9 +29,12 @@ const listFiles = async (dir: string) => {
   return fileList
 }
 
-ipcMain.on('synchronous-message', (event, arg) => {
-  console.log(arg) // prints "ping"
-  event.returnValue = 'pong'
+ipcMain.on('get-data-path', (event) => {
+  event.returnValue = app.getPath('userData')
+})
+
+ipcMain.on('check-dir-exists', (event, directory) => {
+  event.returnValue = fs.statSync(directory).isDirectory()
 })
 
 ipcMain.on('list-files', (event, directory) => {
@@ -45,7 +48,7 @@ ipcMain.on('list-files', (event, directory) => {
   })
 })
 
-ipcMain.on('get-new-folder', (event, directory) => {
+ipcMain.on('get-new-folder', (event) => {
   dialog.showOpenDialog({properties: ['openDirectory']})
     .then((folder) => {
       event.returnValue = folder

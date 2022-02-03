@@ -12,16 +12,13 @@ const App = () => {
     state.outputs.primary,
     state.outputs.secondary,
   ])
-  const [outputs, directory] = useStoreState((state: Store) => [
-    state.outputs,
-    state.fileDirectory,
-  ])
+  const directory = useStoreState((state: Store) => state.fileDirectory)
 
   const [files, setFiles] = useState<File[]>([])
-  let audio = new Audio() as ExtendedAudioElement
+  let primaryInjector = new Audio() as ExtendedAudioElement
+  let secondaryInjector = new Audio() as ExtendedAudioElement
 
   useEffect(() => {
-    console.log("it's working!")
     try {
       setFiles(ipcRenderer.sendSync('list-files', directory).files)
     } catch (e) {}
@@ -29,25 +26,53 @@ const App = () => {
     navigator.mediaDevices
       .getUserMedia({
         audio: {
+          // to reduce latency
           echoCancellation: false,
           noiseSuppression: false,
         },
       })
       .then(async function (stream) {
+        // if the outputs are empty, the AudioContext plays to the speakers by default
+        // we don't want that, we only want to play on the audio device the user SPECIFIED
+        // if the user didn't specify an audio device, then just don't play-simple
+        if (primaryOutput === '' && secondaryOutput === '') return;
+
+        // Create a variable that hooks into the microphone
         let aCtx = new AudioContext()
         let microphone = aCtx.createMediaStreamSource(stream)
         let destination = aCtx.createMediaStreamDestination()
         microphone.connect(destination)
-        await audio.setSinkId(primaryOutput)
-        audio.srcObject = destination.stream
-        audio.play()
+        if (primaryOutput !== '') {
+
+          // Set the output device
+          await primaryInjector.setSinkId(primaryOutput)
+
+          // set the source to the microphone stream & play
+          primaryInjector.srcObject = destination.stream
+          primaryInjector.play()
+        }
+
+        if (secondaryOutput !== '') {
+          await secondaryInjector.setSinkId(secondaryOutput)
+
+          secondaryInjector.srcObject = destination.stream
+          secondaryInjector.play()
+
+        }
       })
   }, [directory, primaryOutput])
 
   useEffect(() => {
     return () => {
-      audio.srcObject = null
-      audio.pause()
+      // when the user navigates to another page (e.g. settings), stop the Injector
+      // because if the user navigates back to this page, there will be MULTIPLE microphone injectors
+      // we don't want 5000 microphone injectors run at once if the user switches between pages multiple times
+
+      primaryInjector.srcObject = null
+      primaryInjector.pause()
+
+      secondaryInjector.srcObject = null
+      secondaryInjector.pause()
     }
   }, [])
 
