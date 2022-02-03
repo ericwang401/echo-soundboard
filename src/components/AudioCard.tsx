@@ -1,5 +1,5 @@
 import { Store } from '@/state'
-import { amplifyMedia, ExtendedAudioElement } from '@/util/AudioDevices'
+import { ExtendedAudioElement } from '@/util/AudioDevices'
 import {
   VolumeUpIcon,
   PlayIcon,
@@ -17,9 +17,12 @@ const AudioCard = (props: AudioCardProps) => {
     state.outputs.primary,
     state.outputs.secondary,
   ])
+  const soundTrackVolume = useStoreState((state: Store) => state.soundTrackVolume)
   const play = async () => {
-    let primary = amplifyMedia(new Audio() as ExtendedAudioElement, 2).media
+    let primary = new Audio() as ExtendedAudioElement
     let secondary = new Audio() as ExtendedAudioElement
+    primary.volume = soundTrackVolume
+    secondary.volume = soundTrackVolume
     primary.src = props.path
     secondary.src = props.path
     await primary.setSinkId(primaryOutput)
