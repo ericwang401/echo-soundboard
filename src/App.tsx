@@ -9,9 +9,10 @@ import { useStoreState } from 'easy-peasy'
 import Button from '@/components/Button'
 
 const App = () => {
-  const [primaryOutput, secondaryOutput] = useStoreState((state: Store) => [
+  const [primaryOutput, secondaryOutput, microphone] = useStoreState((state: Store) => [
     state.outputs.primary,
     state.outputs.secondary,
+    state.microphone,
   ])
   const directory = useStoreState((state: Store) => state.fileDirectory)
 
@@ -24,9 +25,12 @@ const App = () => {
       setFiles(ipcRenderer.sendSync('list-files', directory).files)
     } catch (e) {}
 
+    if (microphone === '') return;
+
     navigator.mediaDevices
       .getUserMedia({
         audio: {
+          deviceId: { exact: microphone },
           // to reduce latency
           echoCancellation: false,
           noiseSuppression: false,

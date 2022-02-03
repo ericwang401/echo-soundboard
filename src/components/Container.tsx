@@ -7,7 +7,7 @@ export interface ContainerProps {
 
 const Container = (props: ContainerProps) => {
     return (
-        <div className={`h-full w-full overflow-auto ${props.className}`}>
+        <div className={`h-full w-full inset-0 ${props.className}`}>
             { props.children }
         </div>
     )

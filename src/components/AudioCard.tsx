@@ -1,12 +1,11 @@
 import { Store } from '@/state'
-import { ExtendedAudioElement } from '@/util/AudioDevices'
+import { amplifyMedia, ExtendedAudioElement } from '@/util/AudioDevices'
 import {
   VolumeUpIcon,
   PlayIcon,
   DotsVerticalIcon,
 } from '@heroicons/react/outline'
 import { useStoreState } from 'easy-peasy'
-import { useEffect } from 'react'
 
 interface AudioCardProps {
   name: string
@@ -19,7 +18,7 @@ const AudioCard = (props: AudioCardProps) => {
     state.outputs.secondary,
   ])
   const play = async () => {
-    let primary = new Audio() as ExtendedAudioElement
+    let primary = amplifyMedia(new Audio() as ExtendedAudioElement, 2).media
     let secondary = new Audio() as ExtendedAudioElement
     primary.src = props.path
     secondary.src = props.path
