@@ -8,6 +8,7 @@ import NavigationBar from './components/NavigationBar'
 import { store } from '@/state'
 import Settings from '@/pages/settings/SettingsContainer'
 
+
 ReactDOM.render(
   <React.StrictMode>
     <StoreProvider store={store}>
