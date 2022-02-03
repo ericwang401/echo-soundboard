@@ -1,4 +1,4 @@
-import { ipcMain, dialog, app } from 'electron'
+import { ipcMain, dialog, app, shell } from 'electron'
 import * as path from 'path'
 import * as mime from 'mime'
 import * as fs from 'fs'
@@ -36,6 +36,12 @@ ipcMain.on('get-data-path', (event) => {
 ipcMain.on('check-dir-exists', (event, directory) => {
   event.returnValue = fs.statSync(directory).isDirectory()
 })
+
+ipcMain.on('open-external-link', (event, link) => {
+  shell.openExternal(link)
+  event.returnValue = true
+})
+
 
 ipcMain.on('list-files', (event, directory) => {
   listFiles(directory).then((files) => {

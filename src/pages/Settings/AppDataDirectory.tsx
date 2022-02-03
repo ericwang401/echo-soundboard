@@ -13,7 +13,7 @@ const AppDataDirectory = () => {
       setFileDirectory(directory.filePaths[0])
       storage.setDataPath(directory.filePaths[0])
       localStorage.setItem('app-config-dir', directory.filePaths[0])
-      window.location.reload()
+      window.location.reload() // because the store needs to refetch the save file and it only fetches when the store is created
     }
   }
 
