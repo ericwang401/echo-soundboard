@@ -6,6 +6,7 @@ import {
   DotsVerticalIcon,
 } from '@heroicons/react/outline'
 import { useStoreState } from 'easy-peasy'
+import { useEffect } from 'react'
 
 interface AudioCardProps {
   name: string
@@ -24,6 +25,10 @@ const AudioCard = (props: AudioCardProps) => {
     secondary.src = props.path
     await primary.setSinkId(primaryOutput)
     await secondary.setSinkId(secondaryOutput)
+    document.addEventListener("muteAll", () => {
+      primary.pause()
+      secondary.pause()
+    })
     if (primaryOutput !== '') {
       primary.play()
     }

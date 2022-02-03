@@ -6,6 +6,7 @@ import { ipcRenderer } from 'electron'
 import { File } from '@/plugins/electron/events'
 import { ExtendedAudioElement } from '@/util/AudioDevices'
 import { useStoreState } from 'easy-peasy'
+import Button from '@/components/Button'
 
 const App = () => {
   const [primaryOutput, secondaryOutput] = useStoreState((state: Store) => [
@@ -35,7 +36,7 @@ const App = () => {
         // if the outputs are empty, the AudioContext plays to the speakers by default
         // we don't want that, we only want to play on the audio device the user SPECIFIED
         // if the user didn't specify an audio device, then just don't play-simple
-        if (primaryOutput === '' && secondaryOutput === '') return;
+        if (primaryOutput === '' && secondaryOutput === '') return
 
         // Create a variable that hooks into the microphone
         let aCtx = new AudioContext()
@@ -43,7 +44,6 @@ const App = () => {
         let destination = aCtx.createMediaStreamDestination()
         microphone.connect(destination)
         if (primaryOutput !== '') {
-
           // Set the output device
           await primaryInjector.setSinkId(primaryOutput)
 
@@ -57,7 +57,6 @@ const App = () => {
 
           secondaryInjector.srcObject = destination.stream
           secondaryInjector.play()
-
         }
       })
   }, [directory, primaryOutput])
@@ -76,9 +75,20 @@ const App = () => {
     }
   }, [])
 
+  const muteAll = () => {
+    let muteEvent = new Event('muteAll', { bubbles: true })
+
+    document.dispatchEvent(muteEvent)
+  }
+
   return (
     <Container>
       <div className='content h-full w-full'>
+        <div className='flex pt-4 justify-end w-full'>
+          <Button isOutlined onClick={() => muteAll()}>
+            Mute all
+          </Button>
+        </div>
         {files && (
           <div className='grid grid-cols-3 lg:grid-cols-4 gap-4 py-4'>
             {files.map((file: File) => (
