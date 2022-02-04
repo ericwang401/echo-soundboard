@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { KeyboardEvent, useEffect, useState } from 'react'
 import Container from '@/components/Container'
 import AudioCard from '@/components/AudioCard'
 import { Store } from '@/state'
@@ -9,11 +9,13 @@ import { useStoreState } from 'easy-peasy'
 import Button from '@/components/Button'
 
 const App = () => {
-  const [primaryOutput, secondaryOutput, microphone] = useStoreState((state: Store) => [
-    state.outputs.primary,
-    state.outputs.secondary,
-    state.microphone,
-  ])
+  const [primaryOutput, secondaryOutput, microphone] = useStoreState(
+    (state: Store) => [
+      state.outputs.primary,
+      state.outputs.secondary,
+      state.microphone,
+    ]
+  )
   const directory = useStoreState((state: Store) => state.fileDirectory)
 
   const [files, setFiles] = useState<File[]>([])
@@ -25,7 +27,7 @@ const App = () => {
       setFiles(ipcRenderer.sendSync('list-files', directory).files)
     } catch (e) {}
 
-    if (microphone === '') return;
+    if (microphone === '') return
 
     navigator.mediaDevices
       .getUserMedia({
@@ -85,10 +87,26 @@ const App = () => {
     document.dispatchEvent(muteEvent)
   }
 
+  const onKeyPress = (e: KeyboardEvent<HTMLButtonElement>) => {
+    console.log(e.key)
+  }
+
+  const recordKeybind = () => {
+    let logEvent = (e: globalThis.KeyboardEvent) => {
+      console.log(e)
+    }
+
+    let event = document.addEventListener('keydown', logEvent)
+
+    document.removeEventListener('keydown', logEvent)
+  }
+
+
   return (
     <Container>
       <div className='content h-full w-full'>
         <div className='flex pt-4 justify-end w-full'>
+          <button onClick={recordKeybind}>test</button>
           <Button isOutlined onClick={() => muteAll()}>
             Mute all
           </Button>
