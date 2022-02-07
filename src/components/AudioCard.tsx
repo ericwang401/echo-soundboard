@@ -7,7 +7,7 @@ import {
   DotsVerticalIcon,
 } from '@heroicons/react/outline'
 import { useStoreState } from 'easy-peasy'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useCallback, useRef, useState } from 'react'
 
 interface AudioCardProps {
   name: string
@@ -24,7 +24,7 @@ const AudioCard = (props: AudioCardProps) => {
   const soundTrackVolume = useStoreState(
     (state: Store) => state.soundTrackVolume
   )
-  const isRecordingKeybind = useState<boolean>(false)
+  const [isRecordingKeybind, setIsRecordingKeybind] = useState<boolean>(false)
   const play = async () => {
     let primary = new Audio() as ExtendedAudioElement
     let secondary = new Audio() as ExtendedAudioElement
@@ -47,10 +47,19 @@ const AudioCard = (props: AudioCardProps) => {
     }
   }
 
+  const logEvent = useCallback((e: globalThis.KeyboardEvent) => {
+    console.log(e)
+  }, [])
+
   const recordKeybind = () => {
-
+    if (!isRecordingKeybind) {
+      setIsRecordingKeybind(true)
+      document.addEventListener('keydown', logEvent)
+    } else if (isRecordingKeybind) {
+      setIsRecordingKeybind(false)
+      document.removeEventListener('keydown', logEvent)
+    }
   }
-
 
   return (
     <div className='relative flex items-center bg-black border-neutral-700 border rounded-md p-4'>
@@ -78,8 +87,11 @@ const AudioCard = (props: AudioCardProps) => {
                   ref={popoverContainer}
                   className='absolute z-20 bg-neutral-900 border-neutral-700 border rounded-md mt-2 p-4 w-56'
                 >
-                  <p className="text-sm">Click to record hotkey <br />Click again to stop</p>
-                  <Button onClick={recordKeybind}>No Hotkey</Button>
+                  <p className='text-sm'>
+                    Click to record hotkey <br />
+                    Click again to stop
+                  </p>
+                  <Button onClick={recordKeybind}>{isRecordingKeybind ? 'Recording' : 'No Hotkey'}</Button>
                 </div>
               )}
             </div>

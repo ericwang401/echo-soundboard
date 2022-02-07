@@ -24,26 +24,10 @@ const App = () => {
     document.dispatchEvent(muteEvent)
   }
 
-  const onKeyPress = (e: KeyboardEvent<HTMLButtonElement>) => {
-    console.log(e.key)
-  }
-
-  const recordKeybind = () => {
-    let logEvent = (e: globalThis.KeyboardEvent) => {
-      console.log(e)
-    }
-
-    let event = document.addEventListener('keydown', logEvent)
-
-    document.removeEventListener('keydown', logEvent)
-  }
-
-
   return (
     <Container>
       <div className='content h-full w-full'>
         <div className='flex pt-4 justify-end w-full'>
-          <button onClick={recordKeybind}>test</button>
           <Button isOutlined onClick={() => muteAll()}>
             Mute all
           </Button>
