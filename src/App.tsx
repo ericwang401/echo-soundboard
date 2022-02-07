@@ -2,14 +2,12 @@ import { HashRouter, Routes, Route } from 'react-router-dom'
 import Overview from './pages/Overview'
 import NavigationBar from './components/NavigationBar'
 import Settings from '@/pages/settings/SettingsContainer'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { ExtendedAudioElement } from '@/util/AudioDevices'
-import { useStoreState, useStoreRehydrated } from 'easy-peasy'
+import { useStoreState } from 'easy-peasy'
 import { Store } from '@/state'
 
 const App = () => {
-  const isRehydrated = useStoreRehydrated()
-
   const [primaryOutput, secondaryOutput, microphone] = useStoreState(
     (state: Store) => [
       state.outputs.primary,
@@ -18,8 +16,8 @@ const App = () => {
     ]
   )
 
-  const primaryInjector = new Audio() as ExtendedAudioElement
-  const secondaryInjector = new Audio() as ExtendedAudioElement
+  const primaryInjector = useMemo(() => new Audio() as ExtendedAudioElement, [])
+  const secondaryInjector = useMemo(() => new Audio() as ExtendedAudioElement, [])
 
   useEffect(() => {
     console.log('Received microphone config', {
@@ -29,11 +27,35 @@ const App = () => {
     })
 
     if (microphone === '') {
-      console.log('did not pass')
+      primaryInjector.srcObject = null
+      primaryInjector.pause()
+
+      secondaryInjector.srcObject = null
+      secondaryInjector.pause()
+
+      console.log(
+        'Stopped microphone injector because microphone input is unspecified'
+      )
       return
     }
 
-    console.log('passed empty microphone check')
+    if (primaryOutput === '') {
+      primaryInjector.srcObject = null
+      primaryInjector.pause()
+
+      console.log(
+        'Stopped primary injector because primary output is unspecified'
+      )
+    }
+
+    if (secondaryOutput === '') {
+      secondaryInjector.srcObject = null
+      secondaryInjector.pause()
+
+      console.log(
+        'Stopped secondary injector because secondary output is unspecified'
+      )
+    }
 
     navigator.mediaDevices
       .getUserMedia({
@@ -62,6 +84,7 @@ const App = () => {
           // set the source to the microphone stream & play
           primaryInjector.srcObject = destination.stream
           primaryInjector.play()
+          console.log('Injected into primary output')
         }
 
         if (secondaryOutput !== '') {
@@ -69,6 +92,7 @@ const App = () => {
 
           secondaryInjector.srcObject = destination.stream
           secondaryInjector.play()
+          console.log('Injected into secondary output')
         }
 
         console.log('Injected microphone with config', {
@@ -79,39 +103,6 @@ const App = () => {
       })
   }, [primaryOutput, secondaryOutput, microphone])
 
-  useEffect(() => {
-    if (microphone !== '') return
-
-    setTimeout(() => {
-      console.log(
-        'before',
-        primaryInjector.srcObject,
-        secondaryInjector.srcObject
-      )
-      primaryInjector.srcObject = null
-      primaryInjector.pause()
-
-      secondaryInjector.srcObject = null
-      secondaryInjector.pause()
-
-      console.log(
-        'after',
-        primaryInjector.srcObject,
-        secondaryInjector.srcObject
-      )
-      console.log(
-        'Stopped microphone injector because microphone input is unspecified'
-      )
-    }, 500)
-  }, [primaryOutput, secondaryOutput, microphone])
-
-  /* useEffect(() => {
-    return () => {
-      // when the user navigates to another page (e.g. settings), stop the Injector
-      // because if the user navigates back to this page, there will be MULTIPLE microphone injectors
-      // we don't want 5000 microphone injectors run at once if the user switches between pages multiple times
-    }
-  }, []) */
   return (
     <HashRouter>
       <NavigationBar />
