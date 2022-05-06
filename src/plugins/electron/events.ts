@@ -1,11 +1,16 @@
-import { ipcMain, dialog, app, shell } from 'electron'
+import { ipcMain, dialog, app, shell, globalShortcut } from 'electron'
 import * as path from 'path'
 import * as mime from 'mime'
 import * as fs from 'fs'
 
+export interface soundTrackSettings {
+  path: string
+  keybinds: string[]
+}
+
 export interface File {
-  name: string;
-  path: string;
+  name: string
+  path: string
 }
 
 const fspromise = fs.promises
@@ -21,7 +26,7 @@ const listFiles = async (dir: string) => {
         mime.getType(filePath) === 'audio/wav' ||
         mime.getType(filePath) === 'audio/ogg'
       ) {
-        fileList.push({name: file, path: path.join(dir, file)})
+        fileList.push({ name: file, path: path.join(dir, file) })
       }
     }
   })
@@ -42,23 +47,53 @@ ipcMain.on('open-external-link', (event, link) => {
   event.returnValue = true
 })
 
-
 ipcMain.on('list-files', (event, directory) => {
-  listFiles(directory).then((files) => {
-    event.returnValue = {
-      dir: directory,
-      files
-    }
-  }).catch(() => {
-    event.returnValue = []
-  })
+  listFiles(directory)
+    .then((files) => {
+      event.returnValue = {
+        dir: directory,
+        files,
+      }
+    })
+    .catch(() => {
+      event.returnValue = []
+    })
 })
 
 ipcMain.on('get-new-folder', (event) => {
-  dialog.showOpenDialog({properties: ['openDirectory']})
+  dialog
+    .showOpenDialog({ properties: ['openDirectory'] })
     .then((folder) => {
       event.returnValue = folder
-    }).catch(err => {
+    })
+    .catch((err) => {
       console.log(err)
     })
+})
+
+let registeredBindings: soundTrackSettings[] = []
+
+ipcMain.on('set-keybind', (event, soundTrackSettings: soundTrackSettings) => {
+  // detect if keybind is already registered
+  const index = registeredBindings.findIndex(
+    (soundTrack) => soundTrack.path === soundTrackSettings.path
+  )
+  console.log('keybinds:', soundTrackSettings.keybinds)
+
+  if (index !== -1) {
+    globalShortcut.unregister(registeredBindings[index].keybinds.join('+'))
+
+    registeredBindings = registeredBindings.filter(
+      (soundTrack, soundIndex) => soundIndex !== index
+    )
+  }
+
+  if (soundTrackSettings.keybinds.length > 0) {
+    registeredBindings.push(soundTrackSettings)
+    globalShortcut.register(soundTrackSettings.keybinds.join('+'), () => {
+      event.reply('play-soundtrack', soundTrackSettings.path)
+    })
+  }
+
+  event.returnValue = true
 })

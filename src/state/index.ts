@@ -6,18 +6,18 @@ export interface Store {
   microphone: string
   fileDirectory: string
   soundTrackVolume: number
-  soundTracksSettings: soundTrackSetting[]
+  soundTracksSettings: soundTrackSettings[]
   setPrimary: Action<Store, string>
   setSecondary: Action<Store, string>
   setFileDirectory: Action<Store, string>
   setMicrophone: Action<Store, string>
   setSoundTrackVolume: Action<Store, number>
-  setSoundTrackSetting: Action<Store, soundTrackSetting>
+  setSoundTrackSettings: Action<Store, soundTrackSettings>
 }
 
-export interface soundTrackSetting {
+export interface soundTrackSettings {
   path: string
-  keybind?: string
+  keybinds: string[]
 }
 
 export interface OutputsStore {
@@ -50,9 +50,17 @@ export const store = createStore<Store>(
     setSoundTrackVolume: action((state, payload: number) => {
       state.soundTrackVolume = payload
     }),
-    setSoundTrackSetting: action((state, payload: soundTrackSetting) => {
+    setSoundTrackSettings: action((state, payload: soundTrackSettings) => {
       // check if soundtrack path is in state
+      const index = state.soundTracksSettings.findIndex(
+        (soundTrack) => soundTrack.path === payload.path
+      )
 
+      if (index === -1) {
+        state.soundTracksSettings.push(payload)
+      } else {
+        state.soundTracksSettings[index] = payload
+      }
     })
   }, {
     storage: storageEngine
