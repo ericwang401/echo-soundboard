@@ -11,10 +11,10 @@ If you use this software and enjoy it, please donate to me! https://www.patreon.
 ### `Microphone injector`
 ### `App config customization`
 ### `Volume slider for sound tracks`
+### `Hotkeys`
 
 ## To be done
 
-### `Hotkeys`
 ### `Search field for sound tracks`
 
 ## How to build

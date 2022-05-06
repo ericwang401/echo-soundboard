@@ -90,7 +90,10 @@ const AudioCard = (props: AudioCardProps) => {
     }
   }
   useEffect(() => {
-    console.log('Setting up keybind listener')
+    ipcRenderer.sendSync('set-keybind', {
+      path: props.path,
+      keybinds: fetchSoundTrackSettings.keybinds,
+    })
     ipcRenderer.removeListener('play-soundtrack', playSoundViaPath)
 
     keybindListener.current = ipcRenderer.on(
@@ -102,6 +105,15 @@ const AudioCard = (props: AudioCardProps) => {
       ipcRenderer.removeListener('play-soundtrack', playSoundViaPath)
     }
   }, [])
+
+  useEffect(() => {
+    ipcRenderer.removeListener('play-soundtrack', playSoundViaPath)
+
+    keybindListener.current = ipcRenderer.on(
+      'play-soundtrack',
+      playSoundViaPath
+    )
+  }, [fetchSoundTrackSettings])
 
   /*
   // for debugging only
@@ -121,7 +133,6 @@ const AudioCard = (props: AudioCardProps) => {
 
   const recordKeybind = (stop?: boolean) => {
     if (stop) {
-      setShowPopover(false)
       console.log(
         'Stopped recording hotkey because mouse left popover',
         "Keybinding also didn't register"
