@@ -69,10 +69,6 @@ const AudioCard = (props: AudioCardProps) => {
     secondary.src = props.path
     await primary.setSinkId(primaryOutput)
     await secondary.setSinkId(secondaryOutput)
-    document.addEventListener('muteAll', () => {
-      primary.pause()
-      secondary.pause()
-    })
     if (primaryOutput !== '') {
       primary.play()
     }
@@ -80,6 +76,26 @@ const AudioCard = (props: AudioCardProps) => {
     if (secondaryOutput !== '') {
       secondary.play()
     }
+
+    document.addEventListener('muteAll', () => {
+      primary.src = ''
+      secondary.src = ''
+      primary.remove()
+      secondary.remove()
+      primary.pause()
+      secondary.pause()
+    })
+
+    primary.addEventListener('ended', () => {
+      primary.src = ''
+      secondary.src = ''
+      primary.remove()
+    });
+    secondary.addEventListener('ended', () => {
+      primary.src = ''
+      secondary.src = ''
+      secondary.remove()
+    });
   }
 
   const keybindListener = useRef<any>()
