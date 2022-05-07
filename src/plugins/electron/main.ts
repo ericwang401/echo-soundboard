@@ -5,6 +5,8 @@ import installExtension, {
 } from 'electron-devtools-installer'
 import './events'
 const { autoUpdater } = require('electron-updater')
+autoUpdater.logger = require('electron-log')
+autoUpdater.logger.transports.file.level = 'info'
 
 function createWindow() {
   const win = new BrowserWindow({
