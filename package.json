@@ -1,6 +1,6 @@
 {
   "name": "echo",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "private": true,
   "main": "build/electron/main.js",
   "homepage": "./",
@@ -77,5 +77,26 @@
     "react-app-rewired": "^2.1.11",
     "tailwindcss": "^3.0.18",
     "wait-on": "^6.0.0"
+  },
+  "build": {
+    "directories": {
+      "buildResources": "build",
+      "output": "release"
+    },
+    "appId": "com.github.ericwang401.echo-soundboard",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/logo.ico"
+    },
+    "nsis": {
+      "oneClick": false
+    },
+    "linux": {
+      "category": "public.app-category.utilities",
+      "target": "AppImage"
+    }
   }
 }

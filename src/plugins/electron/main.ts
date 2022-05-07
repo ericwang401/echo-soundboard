@@ -13,6 +13,7 @@ function createWindow() {
     width: 800,
     height: 600,
     title: 'Echo Soundboard by Performave',
+    icon: './public/logo.ico',
     ////titleBarStyle: "hidden",
     autoHideMenuBar: app.isPackaged ? true : false,
     webPreferences: {
