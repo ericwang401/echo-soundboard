@@ -41,4 +41,6 @@ export const play = async (props: PlayProps, primaryOutput: string, secondaryOut
     secondary.src = ''
     secondary.remove()
   })
+
+  console.log('played!')
 }

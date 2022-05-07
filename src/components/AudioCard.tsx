@@ -77,7 +77,6 @@ const AudioCard = (props: AudioCardProps) => {
       path: props.path,
       keybinds: fetchSoundTrackSettings.keybinds,
     })
-    ipcRenderer.removeListener('play-soundtrack', playSoundViaPath)
 
     keybindListener.current = ipcRenderer.on(
       'play-soundtrack',
@@ -88,15 +87,6 @@ const AudioCard = (props: AudioCardProps) => {
       ipcRenderer.removeListener('play-soundtrack', playSoundViaPath)
     }
   }, [])
-
-  useEffect(() => {
-    ipcRenderer.removeListener('play-soundtrack', playSoundViaPath)
-
-    keybindListener.current = ipcRenderer.on(
-      'play-soundtrack',
-      playSoundViaPath
-    )
-  }, [fetchSoundTrackSettings])
 
   /*
   // for debugging only
