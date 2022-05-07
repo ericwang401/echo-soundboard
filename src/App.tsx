@@ -12,9 +12,20 @@ import { useEffect, useMemo } from 'react'
 import { ExtendedAudioElement } from '@/util/AudioDevices'
 import { useStoreState } from 'easy-peasy'
 import { Store } from '@/state'
+import { ipcRenderer } from 'electron'
 
 const Analytics = () => {
   const location = useLocation()
+
+  useEffect(() => {
+    ReactGA.event({
+      category: 'other',
+      action: 'app_version',
+      label: ipcRenderer.sendSync('get-version'),
+      value: 1,
+
+    })
+  }, [])
 
   useEffect(() => {
     ReactGA.send({ hitType: 'pageview', page: location.pathname })

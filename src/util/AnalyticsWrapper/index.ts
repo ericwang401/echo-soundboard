@@ -403,7 +403,7 @@ export class GA4 {
    * @param {UaEventOptions|string} optionsOrName
    * @param {Object} [params]
    */
-  event = (optionsOrName, params) => {
+  event = (optionsOrName?, params?) => {
     if (typeof optionsOrName === "string") {
       this._gtag("event", optionsOrName, this._toGtagOptions(params));
     } else {
