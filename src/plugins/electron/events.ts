@@ -78,7 +78,6 @@ ipcMain.on('set-keybind', (event, soundTrackSettings: soundTrackSettings) => {
   const index = registeredBindings.findIndex(
     (soundTrack) => soundTrack.path === soundTrackSettings.path
   )
-  console.log('keybinds:', soundTrackSettings.keybinds)
 
   if (index !== -1) {
     globalShortcut.unregister(registeredBindings[index].keybinds.join('+'))
@@ -96,4 +95,8 @@ ipcMain.on('set-keybind', (event, soundTrackSettings: soundTrackSettings) => {
   }
 
   event.returnValue = true
+})
+
+ipcMain.on('get-version', (event) => {
+  event.returnValue = app.getVersion()
 })

@@ -4,16 +4,15 @@ import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer'
 import './events'
-
-
+const { autoUpdater } = require('electron-updater')
 
 function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
-    title: "Echo Soundboard by Performave",
+    title: 'Echo Soundboard by Performave',
     ////titleBarStyle: "hidden",
-    autoHideMenuBar: (app.isPackaged ? true : false),
+    autoHideMenuBar: app.isPackaged ? true : false,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -27,9 +26,6 @@ function createWindow() {
     win.loadURL(`file://${__dirname}/../index.html`)
   } else {
     win.loadURL('http://localhost:3000/')
-    console.log('test', __dirname, {
-      cmd: path.join(__dirname, '..', '..', 'node_modules', '.bin', 'electron'),
-    })
 
     try {
       require('electron-reloader')(module)
@@ -40,6 +36,7 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  autoUpdater.checkForUpdatesAndNotify().then((res: any) => console.log(res))
   // DevTools
   installExtension(REACT_DEVELOPER_TOOLS)
     .then((name) => console.log(`Added Extension:  ${name}`))

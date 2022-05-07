@@ -1,6 +1,9 @@
-import ReactGA from 'react-ga4'
+// @ts-ignore
+/* import ReactGA from 'electron-google-analytics'
 
-ReactGA.initialize('G-LNCY42ZM08')
+const analytics = new ReactGA('G-LNCY42ZM08')
 ReactGA.send('pageview')
+
+export default analytics */
 
 export {}

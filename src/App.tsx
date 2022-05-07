@@ -1,5 +1,5 @@
 import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
-import ReactGA from 'react-ga4'
+/* import analytics from '@/util/Analytics' */
 import Overview from './pages/Overview'
 import NavigationBar from './components/NavigationBar'
 import Settings from '@/pages/settings/SettingsContainer'
@@ -12,7 +12,7 @@ const Analytics = () => {
   const location = useLocation()
 
   useEffect(() => {
-    ReactGA.send({ hitType: "pageview", page: location.pathname })
+    /* analytics.send('pageview', {page: location.pathname }) */
   }, [location])
 
   return <></>

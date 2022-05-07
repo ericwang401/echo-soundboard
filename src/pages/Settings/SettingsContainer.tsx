@@ -23,7 +23,7 @@ const Settings = () => {
                 <span>
                   <h3 className='text-xl font-semibold'>Echo Soundboard</h3>
                   <p className='text-sm'>
-                    A Performave product &#8226; Version 1.1.1 Yae Miko
+                    A Performave product &#8226; Version { ipcRenderer.sendSync('get-version') } Yae Miko
                   </p>
                 </span>
 
