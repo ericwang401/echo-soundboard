@@ -90,12 +90,12 @@ const AudioCard = (props: AudioCardProps) => {
       primary.src = ''
       secondary.src = ''
       primary.remove()
-    });
+    })
     secondary.addEventListener('ended', () => {
       primary.src = ''
       secondary.src = ''
       secondary.remove()
-    });
+    })
   }
 
   const keybindListener = useRef<any>()
@@ -184,72 +184,73 @@ const AudioCard = (props: AudioCardProps) => {
   }
 
   return (
-    <div className='relative flex items-center bg-black border-neutral-700 border rounded-md p-4'>
-      <div className='grid z-10 place-items-center absolute w-full h-full -ml-4 transition-opacity opacity-0 hover:opacity-100 bg-gray-800 rounded-md'>
-        <div
-          className='absolute cursor-pointer inset-0 pointe opacity-0'
-          onClick={() => play()}
-        ></div>
-        <div className='grid grid-cols-3 w-full'>
-          <div className='col-start-2 flex justify-center items-center'>
-            <PlayIcon className='w-7 h-7' />
-            <span className='ml-1.5'>Play</span>
-          </div>
-          <div className='col-start-3 flex justify-end'>
-            <div className='relative'>
-              <button
-                onClick={() => setShowPopover(!showPopover)}
-                className='p-2 z-10 m-2  ml-0 rounded-md transition-colors bg-transparent hover:bg-gray-900'
-              >
-                <DotsVerticalIcon className='w-5' />
-              </button>
-
-              {showPopover && (
-                <div
-                  onMouseLeave={() => recordKeybind(true)}
-                  ref={popoverContainer}
-                  className='absolute !z-50 bg-neutral-900 border-neutral-700 border rounded-md mt-2 p-4 w-56'
+    <div className='relative'>
+      <div className='relative flex items-center bg-black border-neutral-700 border rounded-md p-4'>
+        <div className='grid z-10 place-items-center absolute w-full h-full -ml-4 transition-opacity opacity-0 hover:opacity-100 bg-gray-800 rounded-md'>
+          <div
+            className='absolute cursor-pointer inset-0 pointe opacity-0'
+            onClick={() => play()}
+          ></div>
+          <div className='grid grid-cols-3 w-full'>
+            <div className='col-start-2 flex justify-center items-center'>
+              <PlayIcon className='w-7 h-7' />
+              <span className='ml-1.5'>Play</span>
+            </div>
+            <div className='col-start-3 flex justify-end'>
+              <div className='relative'>
+                <button
+                  onClick={() => setShowPopover(!showPopover)}
+                  className='p-2 z-10 m-2  ml-0 rounded-md transition-colors bg-transparent hover:bg-gray-900'
                 >
-                  <p className='text-sm'>
-                    {fetchSoundTrackSettings.keybinds.length > 0 &&
-                      !isRecordingKeybind && (
-                        <>
-                          <strong>Hotkeys:</strong>{' '}
-                          {fetchSoundTrackSettings.keybinds.join(' ')}
-                        </>
-                      )}
-                    {_recordedHotkeys.length > 0 && isRecordingKeybind && (
-                      <>
-                        <strong>Recording:</strong> {_recordedHotkeys.join(' ')}
-                      </>
-                    )}
-
-                    {_recordedHotkeys.length === 0 &&
-                      fetchSoundTrackSettings.keybinds.length === 0 && (
-                        <>
-                          Click to record hotkey <br />
-                          Click again to stop
-                        </>
-                      )}
-                  </p>
-                  <Button className='mt-2' onClick={() => recordKeybind(false)}>
-                    {isRecordingKeybind ? 'Recording' : 'Set Hotkey'}
-                  </Button>
-                </div>
-              )}
+                  <DotsVerticalIcon className='w-5' />
+                </button>
+              </div>
             </div>
           </div>
         </div>
+        <div className='flex-shrink-0 relative z-0'>
+          <VolumeUpIcon className='relative w-5 h-5' />
+          {fetchSoundTrackSettings.keybinds.length > 0 && (
+            <LinkIcon className='absolute transform translate-y-2 translate-x-1 bottom-0 right-0 w-3 h-3' />
+          )}
+        </div>
+        <p className='ml-1.5 flex-shrink break-words overflow-ellipsis overflow-hidden whitespace-nowrap'>
+          {props.name}
+        </p>
       </div>
-      <div className='flex-shrink-0 relative z-0'>
-        <VolumeUpIcon className='relative w-5 h-5' />
-        {fetchSoundTrackSettings.keybinds.length > 0 && (
-          <LinkIcon className='absolute transform translate-y-2 translate-x-1 bottom-0 right-0 w-3 h-3' />
-        )}
-      </div>
-      <p className='ml-1.5 flex-shrink break-words overflow-ellipsis overflow-hidden whitespace-nowrap'>
-        {props.name}
-      </p>
+      {showPopover && (
+        <div
+          onMouseLeave={() => recordKeybind(true)}
+          ref={popoverContainer}
+          className='absolute !z-[100] bg-neutral-900 border-neutral-700 border rounded-md transform translate-y-[7rem] bottom-0 p-4 w-56'
+        >
+          <p className='text-sm'>
+            {fetchSoundTrackSettings.keybinds.length > 0 &&
+              !isRecordingKeybind && (
+                <>
+                  <strong>Hotkeys:</strong>{' '}
+                  {fetchSoundTrackSettings.keybinds.join(' ')}
+                </>
+              )}
+            {_recordedHotkeys.length > 0 && isRecordingKeybind && (
+              <>
+                <strong>Recording:</strong> {_recordedHotkeys.join(' ')}
+              </>
+            )}
+
+            {_recordedHotkeys.length === 0 &&
+              fetchSoundTrackSettings.keybinds.length === 0 && (
+                <>
+                  Click to record hotkey <br />
+                  Click again to stop
+                </>
+              )}
+          </p>
+          <Button className='mt-2' onClick={() => recordKeybind(false)}>
+            {isRecordingKeybind ? 'Recording' : 'Set Hotkey'}
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
