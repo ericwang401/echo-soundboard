@@ -1,9 +1,10 @@
 // @ts-ignore
-/* import ReactGA from 'electron-google-analytics'
+import ReactGA from '@/util/AnalyticsWrapper'
+ReactGA.initialize('G-LNCY42ZM08')
+ReactGA.set({ checkProtocolTask: null})
+ReactGA.set({ checkStorageTask: null})
+ReactGA.set({ historyImportTask: null})
 
-const analytics = new ReactGA('G-LNCY42ZM08')
 ReactGA.send('pageview')
-
-export default analytics */
 
 export {}

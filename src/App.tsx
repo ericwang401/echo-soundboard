@@ -1,5 +1,10 @@
-import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
-/* import analytics from '@/util/Analytics' */
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from 'react-router-dom'
+import ReactGA from '@/util/AnalyticsWrapper'
 import Overview from './pages/Overview'
 import NavigationBar from './components/NavigationBar'
 import Settings from '@/pages/settings/SettingsContainer'
@@ -12,7 +17,7 @@ const Analytics = () => {
   const location = useLocation()
 
   useEffect(() => {
-    /* analytics.send('pageview', {page: location.pathname }) */
+    ReactGA.send({ hitType: 'pageview', page: location.pathname })
   }, [location])
 
   return <></>
@@ -28,7 +33,10 @@ const App = () => {
   )
 
   const primaryInjector = useMemo(() => new Audio() as ExtendedAudioElement, [])
-  const secondaryInjector = useMemo(() => new Audio() as ExtendedAudioElement, [])
+  const secondaryInjector = useMemo(
+    () => new Audio() as ExtendedAudioElement,
+    []
+  )
 
   useEffect(() => {
     console.log('Received microphone config', {
