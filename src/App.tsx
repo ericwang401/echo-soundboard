@@ -1,4 +1,5 @@
-import { HashRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import ReactGA from 'react-ga4'
 import Overview from './pages/Overview'
 import NavigationBar from './components/NavigationBar'
 import Settings from '@/pages/settings/SettingsContainer'
@@ -6,6 +7,16 @@ import { useEffect, useMemo } from 'react'
 import { ExtendedAudioElement } from '@/util/AudioDevices'
 import { useStoreState } from 'easy-peasy'
 import { Store } from '@/state'
+
+const Analytics = () => {
+  const location = useLocation()
+
+  useEffect(() => {
+    ReactGA.send({ hitType: "pageview", page: location.pathname })
+  }, [location])
+
+  return <></>
+}
 
 const App = () => {
   const [primaryOutput, secondaryOutput, microphone] = useStoreState(
@@ -104,14 +115,15 @@ const App = () => {
   }, [primaryOutput, secondaryOutput, microphone])
 
   return (
-    <HashRouter>
+    <Router>
+      <Analytics />
       <NavigationBar />
 
       <Routes>
         <Route path='/' element={<Overview />} />
         <Route path='/settings' element={<Settings />} />
       </Routes>
-    </HashRouter>
+    </Router>
   )
 }
 

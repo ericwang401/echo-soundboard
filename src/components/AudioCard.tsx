@@ -11,6 +11,8 @@ import { LinkIcon } from '@heroicons/react/solid'
 import { useStoreState, createTypedHooks } from 'easy-peasy'
 import { useEffect, useCallback, useRef, useState, useMemo } from 'react'
 
+import { play as _play } from '@/util/soundboardTools'
+
 const { useStoreActions } = createTypedHooks<Store>()
 
 interface AudioCardProps {
@@ -60,43 +62,7 @@ const AudioCard = (props: AudioCardProps) => {
     _setRecordedHotkeys(data)
   }
 
-  const play = async () => {
-    let primary = new Audio() as ExtendedAudioElement
-    let secondary = new Audio() as ExtendedAudioElement
-    primary.volume = soundTrackVolume
-    secondary.volume = soundTrackVolume
-    primary.src = props.path
-    secondary.src = props.path
-    await primary.setSinkId(primaryOutput)
-    await secondary.setSinkId(secondaryOutput)
-    if (primaryOutput !== '') {
-      primary.play()
-    }
-
-    if (secondaryOutput !== '') {
-      secondary.play()
-    }
-
-    document.addEventListener('muteAll', () => {
-      primary.src = ''
-      secondary.src = ''
-      primary.remove()
-      secondary.remove()
-      primary.pause()
-      secondary.pause()
-    })
-
-    primary.addEventListener('ended', () => {
-      primary.src = ''
-      secondary.src = ''
-      primary.remove()
-    })
-    secondary.addEventListener('ended', () => {
-      primary.src = ''
-      secondary.src = ''
-      secondary.remove()
-    })
-  }
+  const play = () => _play(props, primaryOutput, secondaryOutput, soundTrackVolume)
 
   const keybindListener = useRef<any>()
   const playSoundViaPath = (event: any, path: string) => {
@@ -105,6 +71,8 @@ const AudioCard = (props: AudioCardProps) => {
       console.log('Playing sound track from keybind via IPC', props.path)
     }
   }
+
+
   useEffect(() => {
     ipcRenderer.sendSync('set-keybind', {
       path: props.path,
