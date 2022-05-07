@@ -1,7 +1,6 @@
 import Button from '@/components/Button'
 import { soundTrackSettings, Store } from '@/state'
 import { ipcRenderer } from 'electron'
-import { ExtendedAudioElement } from '@/util/AudioDevices'
 import {
   VolumeUpIcon,
   PlayIcon,
