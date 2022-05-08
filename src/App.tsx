@@ -7,7 +7,7 @@ import {
 import ReactGA from '@/util/AnalyticsWrapper'
 import Overview from './pages/Overview'
 import NavigationBar from './components/NavigationBar'
-import Settings from '@/pages/settings/SettingsContainer'
+import Settings from '@/pages/Settings/SettingsContainer'
 import { useEffect, useMemo } from 'react'
 import { ExtendedAudioElement } from '@/util/AudioDevices'
 import { useStoreState } from 'easy-peasy'
