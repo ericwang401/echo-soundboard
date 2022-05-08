@@ -27,39 +27,41 @@ function createWindow() {
   }
   splashScreen.center()
 
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    title: 'Echo Soundboard by Performave',
-    icon: './public/logo.ico',
-    show: app.isPackaged ? false : true,
-    autoHideMenuBar: app.isPackaged ? true : false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-      webSecurity: false,
-      preload: path.join(__dirname, 'preload.js'),
-    },
-  })
+  setTimeout(() => {
+    const win = new BrowserWindow({
+      width: 800,
+      height: 600,
+      title: 'Echo Soundboard by Performave',
+      icon: './public/logo.ico',
+      show: app.isPackaged ? false : true,
+      autoHideMenuBar: app.isPackaged ? true : false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false,
+        webSecurity: false,
+        preload: path.join(__dirname, 'preload.js'),
+      },
+    })
 
-  ipcMain.on('set-loading-done', (event) => {
-    splashScreen.close()
-    win.show()
+    ipcMain.on('set-loading-done', (event) => {
+      splashScreen.close()
+      win.show()
 
-    event.returnValue = true
-  })
+      event.returnValue = true
+    })
 
-  if (app.isPackaged) {
-    win.loadURL(`file://${__dirname}/../index.html`)
-  } else {
-    win.loadURL('http://localhost:3000/')
+    if (app.isPackaged) {
+      win.loadURL(`file://${__dirname}/../index.html`)
+    } else {
+      win.loadURL('http://localhost:3000/')
 
-    try {
-      require('electron-reloader')(module)
-    } catch {}
+      try {
+        require('electron-reloader')(module)
+      } catch {}
 
-    win.webContents.openDevTools()
-  }
+      win.webContents.openDevTools()
+    }
+  }, app.isPackaged ? 2000 : 0)
 }
 
 app.whenReady().then(() => {

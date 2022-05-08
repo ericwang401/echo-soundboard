@@ -73,6 +73,8 @@ const AudioCard = (props: AudioCardProps) => {
 
 
   useEffect(() => {
+    ipcRenderer.removeListener('play-soundtrack', playSoundViaPath)
+
     ipcRenderer.sendSync('set-keybind', {
       path: props.path,
       keybinds: fetchSoundTrackSettings.keybinds,
@@ -83,9 +85,9 @@ const AudioCard = (props: AudioCardProps) => {
       playSoundViaPath
     )
 
-    return () => {
+    /* return () => {
       ipcRenderer.removeListener('play-soundtrack', playSoundViaPath)
-    }
+    } */
   }, [])
 
   /*
