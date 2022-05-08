@@ -30,6 +30,10 @@ const Analytics = () => {
     ReactGA.send({ hitType: 'pageview', page: location.pathname })
   }, [location])
 
+  useEffect(() => {
+    ipcRenderer.send('set-loading-done')
+  }, [])
+
   return <></>
 }
 

@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, ipcMain, BrowserWindow } from 'electron'
 import * as path from 'path'
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
@@ -9,12 +9,30 @@ autoUpdater.logger = require('electron-log')
 autoUpdater.logger.transports.file.level = 'info'
 
 function createWindow() {
+  const splashScreen = new BrowserWindow({
+    width: 500,
+    height: 300,
+    transparent: false,
+    resizable: false,
+    show: app.isPackaged ? true : false,
+    frame: false,
+    alwaysOnTop: false,
+    icon: './public/logo.ico',
+  })
+
+  if (app.isPackaged) {
+    splashScreen.loadURL(`file://${__dirname}/../splash-screen.html`)
+  } else {
+    splashScreen.loadURL('http://localhost:3000/splash-screen.html')
+  }
+  splashScreen.center()
+
   const win = new BrowserWindow({
     width: 800,
     height: 600,
     title: 'Echo Soundboard by Performave',
     icon: './public/logo.ico',
-    ////titleBarStyle: "hidden",
+    show: app.isPackaged ? false : true,
     autoHideMenuBar: app.isPackaged ? true : false,
     webPreferences: {
       nodeIntegration: true,
@@ -24,8 +42,14 @@ function createWindow() {
     },
   })
 
+  ipcMain.on('set-loading-done', (event) => {
+    splashScreen.close()
+    win.show()
+
+    event.returnValue = true
+  })
+
   if (app.isPackaged) {
-    // 'build/index.html'
     win.loadURL(`file://${__dirname}/../index.html`)
   } else {
     win.loadURL('http://localhost:3000/')

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+
+    <link rel="stylesheet" href="./inter.css" />
+
+    <title>Echo Loading Screen</title>
+
+    <style>
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        background-color: black;
+        color: white;
+        font-family: Inter var, ui-sans-serif, system-ui, -apple-system,
+          BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+          'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+          'Segoe UI Symbol', 'Noto Color Emoji';
+      }
+
+      body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        filter: brightness(0.5);
+        background: url('./background.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      style="
+        padding: 0 1rem 0 1rem;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      "
+    >
+      <h1>Echo Soundboard</h1>
+      <p style="margin-top: -1.5rem">A Performave product</p>
+      <p id="status" style="position: absolute; right: 3rem; bottom: 1rem">
+        Starting services...
+      </p>
+    </div>
+
+    <script>
+      const messages = [
+        'Starting services...',
+        'Downloading waifus from Fro...',
+        'Yae Miko please come home...',
+        'Waiting on frontend...',
+        'Still starting services...',
+      ]
+
+      messages.map((message, index) => {
+        setTimeout(() => {
+          document.getElementById('status').innerText = message
+        }, 500 + index * 1000 * Math.random())
+      })
+    </script>
+  </body>
+</html>
