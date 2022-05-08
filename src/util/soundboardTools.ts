@@ -1,4 +1,5 @@
 import { ExtendedAudioElement } from '@/util/AudioDevices'
+import ReactGA from '@/util/AnalyticsWrapper'
 
 interface PlayProps {
     name: string
@@ -42,5 +43,11 @@ export const play = async (props: PlayProps, primaryOutput: string, secondaryOut
     secondary.remove()
   })
 
-  console.log('played!')
+
+  ReactGA.event({
+    category: 'activity',
+    action: 'use_soundboard',
+    label: 'play_soundtrack',
+    value: 1,
+  })
 }

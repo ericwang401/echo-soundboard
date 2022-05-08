@@ -23,7 +23,6 @@ const Analytics = () => {
       action: 'app_version',
       label: ipcRenderer.sendSync('get-version'),
       value: 1,
-
     })
   }, [])
 
