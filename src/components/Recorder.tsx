@@ -13,7 +13,7 @@ interface RecorderProps {
     setIsRecordingKeybind: Dispatch<SetStateAction<boolean>>
     recordedHotkeys: string[]
     keybinds: string[]
-    path: string
+    layoutId: string
   }
 }
 
@@ -21,7 +21,7 @@ const Recorder = ({
   options: {
     showPopover,
     recordedHotkeys,
-    path,
+    layoutId,
     keybinds,
     recordKeybind,
     isRecordingKeybind,
@@ -44,7 +44,7 @@ const Recorder = ({
               className='absolute bg-gray-500/50 inset-0 top-0 left-0'
             />
             <motion.div
-              layoutId={path}
+              layoutId={layoutId}
               className='absolute !z-[100] bg-neutral-900 border-neutral-700 border rounded-md p-4 min-w-[30rem]'
             >
               <div className='flex justify-between'>

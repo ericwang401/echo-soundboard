@@ -84,7 +84,7 @@ const AudioCard = (props: AudioCardProps) => {
   )
 
   const { setShowPopover, showPopover, options } = useKeybindRecorder({
-    ...props,
+    identifier: props.path,
     keybinds: fetchSoundTrackSettings.keybinds,
     dispatchKeybinds: (keybinds: string[]) => {
       ipcRenderer.sendSync('set-sound-keybind', {

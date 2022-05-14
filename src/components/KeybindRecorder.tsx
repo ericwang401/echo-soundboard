@@ -2,7 +2,8 @@ import { useCallback, useRef, useState } from 'react'
 import { ipcRenderer } from 'electron'
 import { AudioCardProps } from '@/components/AudioCard'
 
-export interface useKeyboardRecorderProps extends AudioCardProps {
+export interface useKeyboardRecorderProps {
+  identifier: string
   keybinds: string[]
   dispatchKeybinds: (keybinds: string[]) => any
 }
@@ -51,7 +52,7 @@ export const useKeybindRecorder = (props: useKeyboardRecorderProps) => {
       props.dispatchKeybinds(_recordedHotkeys)
 
       console.log('User clicked stop recording:', 'Registered keybind!', {
-        path: props.path,
+        path: props.identifier,
         keybinds: _recordedHotkeys,
       })
       document.removeEventListener('keydown', logEvent)
@@ -66,6 +67,6 @@ export const useKeybindRecorder = (props: useKeyboardRecorderProps) => {
     recordKeybind,
     recordedHotkeys: recordedHotkeys.current,
     keybinds: props.keybinds,
-    path: props.path,
+    layoutId: props.identifier,
   } }
 }

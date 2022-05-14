@@ -8,6 +8,7 @@ import Outputs from '@/pages/Settings/Outputs'
 import Mascot from '@/assets/images/mascot.jpg'
 import { ExclamationCircleIcon } from '@heroicons/react/solid'
 import { mascot } from '@/util/helpers/version'
+import AdditionalKeybinds from '@/pages/Settings/AdditionalKeybinds'
 
 
 const Settings = () => {
@@ -89,6 +90,7 @@ const Settings = () => {
         <FileDirectory />
         <Microphone />
         <AppDataDirectory />
+        <AdditionalKeybinds />
       </div>
     </Container>
   )

@@ -7,12 +7,14 @@ export interface Store {
   fileDirectory: string
   soundTrackVolume: number
   soundTracksSettings: soundTrackSettings[]
+  keybinds: Keybinds
   setPrimary: Action<Store, string>
   setSecondary: Action<Store, string>
   setFileDirectory: Action<Store, string>
   setMicrophone: Action<Store, string>
   setSoundTrackVolume: Action<Store, number>
   setSoundTrackSettings: Action<Store, soundTrackSettings>
+  setKeybind: Action<Store, Keybind>
 }
 
 export interface soundTrackSettings {
@@ -25,6 +27,15 @@ export interface OutputsStore {
   secondary: string
 }
 
+export interface Keybind {
+    name: string,
+    keybinds: string[]
+}
+
+export interface Keybinds {
+  [keybindName: string]: string[]
+}
+
 export const store = createStore<Store>(
   persist({
     outputs: {
@@ -35,6 +46,7 @@ export const store = createStore<Store>(
     soundTrackVolume: 1,
     fileDirectory: '',
     soundTracksSettings: [],
+    keybinds: {},
     setPrimary: action((state, payload: string) => {
       state.outputs.primary = payload
     }),
@@ -61,7 +73,10 @@ export const store = createStore<Store>(
       } else {
         state.soundTracksSettings[index] = payload
       }
-    })
+    }),
+    setKeybind: action((state, payload: Keybind) => {
+        state.keybinds[payload.name] = payload.keybinds
+    }),
   }, {
     storage: storageEngine
   })
