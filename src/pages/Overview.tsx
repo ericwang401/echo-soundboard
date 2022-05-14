@@ -17,6 +17,10 @@ const App = () => {
 
   useEffect(() => {
     try {
+      const ipcFiles = ipcRenderer.sendSync('list-files', directory)
+
+      if (Object.values(ipcFiles).length === 0) return;
+
       setFiles(ipcRenderer.sendSync('list-files', directory).files)
     } catch (e) {}
   }, [directory])
