@@ -35,6 +35,11 @@ function createWindow() {
       icon: './public/logo.ico',
       show: app.isPackaged ? false : true,
       autoHideMenuBar: app.isPackaged ? true : false,
+      titleBarStyle: 'hidden',
+      titleBarOverlay: {
+        color: '#171717',
+        symbolColor: '#fff'
+      },
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
@@ -44,7 +49,7 @@ function createWindow() {
     })
 
     ipcMain.on('set-loading-done', (event) => {
-      splashScreen.close()
+      splashScreen.destroy()
       win.show()
 
       event.returnValue = true
@@ -61,7 +66,7 @@ function createWindow() {
 
       win.webContents.openDevTools()
     }
-  }, app.isPackaged ? 2000 : 0)
+  }, app.isPackaged ? 5000 : 0)
 }
 
 app.whenReady().then(() => {

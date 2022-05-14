@@ -1,6 +1,6 @@
 {
   "name": "echo",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "private": true,
   "main": "build/electron/main.js",
   "homepage": "./",
@@ -25,6 +25,7 @@
     "electron-json-storage": "^4.5.0",
     "electron-log": "^4.4.7",
     "electron-updater": "^5.0.1",
+    "framer-motion": "^6.3.3",
     "mime": "^3.0.0",
     "nodemon": "^2.0.15",
     "react": "^17.0.2",
@@ -42,7 +43,7 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "electron:watch": "nodemon --exec electron .",
-    "electron:dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && tsc -p src/plugins/electron -w\" \"wait-on http://localhost:3000 && tsc -p src/plugins/electron && npm run electron:watch\"",
+    "electron:dev": "concurrently \"cross-env BROWSER=none npm start\" \"tsc -p src/plugins/electron -w\" \"wait-on http://localhost:3000 && tsc -p src/plugins/electron && npm run electron:watch\"",
     "electron:pack": "electron-builder -c.extraMetadata.main=build/electron/main.js",
     "electron:build": "npm run build && tsc -p src/plugins/electron && npm run electron:pack"
   },

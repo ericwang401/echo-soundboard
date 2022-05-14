@@ -7,6 +7,7 @@ import Microphone from '@/pages/Settings/Microphone'
 import Outputs from '@/pages/Settings/Outputs'
 import Mascot from '@/assets/images/mascot.jpg'
 import { ExclamationCircleIcon } from '@heroicons/react/solid'
+import { mascot } from '@/util/helpers/version'
 
 
 const Settings = () => {
@@ -23,7 +24,7 @@ const Settings = () => {
                 <span>
                   <h3 className='text-xl font-semibold'>Echo Soundboard</h3>
                   <p className='text-sm'>
-                    A Performave product &#8226; Version { ipcRenderer.sendSync('get-version') } Beidou
+                    A Performave product &#8226; Version { ipcRenderer.sendSync('get-version') } { mascot.name }
                   </p>
                 </span>
 

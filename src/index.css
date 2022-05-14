@@ -5,7 +5,11 @@
 html,
 body,
 #root {
-  @apply relative text-white w-full h-full bg-neutral-900 overflow-auto m-0 p-0;
+  @apply relative text-white w-full bg-neutral-900 overflow-auto m-0 p-0;
+}
+
+.dragging-enabled {
+  -webkit-app-region: drag
 }
 
 .content {
