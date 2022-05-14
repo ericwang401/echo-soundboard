@@ -19,15 +19,17 @@ const NavigationBar = () => {
       </div>
       <div className='h-[30px]'></div>
       <div className='bg-black  border-neutral-700 border-b'>
-        <div className='flex content !-ml-[8px]'>
-          {links.map((link) => (
-            <NavigationLink
-              key={link.name}
-              name={link.name}
-              to={link.to}
-              active={location.pathname === link.to}
-            />
-          ))}
+        <div className='-ml-[16px]'>
+          <div className='flex content'>
+            {links.map((link) => (
+              <NavigationLink
+                key={link.name}
+                name={link.name}
+                to={link.to}
+                active={location.pathname === link.to}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </>
