@@ -48,10 +48,6 @@ export const useKeybindRecorder = (props: useKeyboardRecorderProps) => {
       document.addEventListener('keydown', logEvent)
     } else if (isRecordingKeybind) {
       setIsRecordingKeybind(false)
-      ipcRenderer.sendSync('set-keybind', {
-        path: props.path,
-        keybinds: _recordedHotkeys,
-      })
       props.dispatchKeybinds(_recordedHotkeys)
 
       console.log('User clicked stop recording:', 'Registered keybind!', {

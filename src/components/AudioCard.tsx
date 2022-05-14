@@ -63,7 +63,7 @@ const AudioCard = (props: AudioCardProps) => {
   }
 
   useEffect(() => {
-    ipcRenderer.sendSync('set-keybind', {
+    ipcRenderer.sendSync('set-sound-keybind', {
       path: props.path,
       keybinds: fetchSoundTrackSettings.keybinds,
     })
@@ -87,6 +87,10 @@ const AudioCard = (props: AudioCardProps) => {
     ...props,
     keybinds: fetchSoundTrackSettings.keybinds,
     dispatchKeybinds: (keybinds: string[]) => {
+      ipcRenderer.sendSync('set-sound-keybind', {
+        path: props.path,
+        keybinds: options.recordedHotkeys,
+      })
       setSoundTrackSettings({
         path: props.path,
         keybinds,

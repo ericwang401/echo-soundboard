@@ -71,26 +71,52 @@ ipcMain.on('get-new-folder', (event) => {
     })
 })
 
-let registeredBindings: soundTrackSettings[] = []
+let registeredSoundBindings: soundTrackSettings[] = []
 
-ipcMain.on('set-keybind', (event, soundTrackSettings: soundTrackSettings) => {
+ipcMain.on('set-sound-keybind', (event, soundTrackSettings: soundTrackSettings) => {
   // detect if keybind is already registered
-  const index = registeredBindings.findIndex(
+  const index = registeredSoundBindings.findIndex(
     (soundTrack) => soundTrack.path === soundTrackSettings.path
   )
 
   if (index !== -1) {
-    globalShortcut.unregister(registeredBindings[index].keybinds.join('+'))
+    globalShortcut.unregister(registeredSoundBindings[index].keybinds.join('+'))
 
-    registeredBindings = registeredBindings.filter(
+    registeredSoundBindings = registeredSoundBindings.filter(
       (soundTrack, soundIndex) => soundIndex !== index
     )
   }
 
   if (soundTrackSettings.keybinds.length > 0) {
-    registeredBindings.push(soundTrackSettings)
+    registeredSoundBindings.push(soundTrackSettings)
     globalShortcut.register(soundTrackSettings.keybinds.join('+'), () => {
       event.reply('play-soundtrack', soundTrackSettings.path)
+    })
+  }
+
+  event.returnValue = true
+})
+
+let registeredNormalBindings: string[][] = []
+
+ipcMain.on('set-keybind', (event, keybinds: string[]) => {
+  // detect if keybind is already registered in registeredNormalBindings
+  const index = registeredNormalBindings.findIndex((registeredKeybind) => {
+    return registeredKeybind === keybinds
+  })
+
+  if (index !== -1) {
+    globalShortcut.unregister(registeredNormalBindings[index].join('+'))
+
+    registeredNormalBindings = registeredNormalBindings.filter(
+      (_, keyIndex) => keyIndex !== index
+    )
+  }
+
+  if (keybinds.length > 0) {
+    registeredNormalBindings.push(keybinds)
+    globalShortcut.register(keybinds.join('+'), () => {
+      event.reply('trigger-keybind', keybinds.join('+'))
     })
   }
 
