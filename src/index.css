@@ -5,11 +5,15 @@
 html,
 body,
 #root {
-  @apply relative text-white w-full bg-neutral-900 overflow-auto m-0 p-0;
+  @apply relative select-none text-white w-full bg-neutral-900 overflow-auto m-0 p-0;
 }
 
 .dragging-enabled {
   -webkit-app-region: drag
+}
+
+.heading {
+  @apply text-xl font-semibold
 }
 
 .content {

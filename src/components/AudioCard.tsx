@@ -1,4 +1,3 @@
-import Button from '@/components/Button'
 import { soundTrackSettings, Store } from '@/state'
 import { ipcRenderer } from 'electron'
 import {
@@ -7,28 +6,29 @@ import {
   DotsVerticalIcon,
 } from '@heroicons/react/outline'
 import { LinkIcon } from '@heroicons/react/solid'
-import { useStoreState, createTypedHooks } from 'easy-peasy'
-import { useEffect, useCallback, useRef, useState, useMemo } from 'react'
+import { useStoreState } from 'easy-peasy'
+import { useEffect, useRef, useMemo } from 'react'
+import { motion } from 'framer-motion'
+import { createTypedHooks } from 'easy-peasy'
+import Recorder from '@/components/Recorder'
 
 import { play as _play } from '@/util/soundboardTools'
+import { useKeybindRecorder } from '@/components/KeybindRecorder'
 
 const { useStoreActions } = createTypedHooks<Store>()
 
-interface AudioCardProps {
+
+export interface AudioCardProps {
   name: string
   path: string
 }
 
 const AudioCard = (props: AudioCardProps) => {
-  const popoverContainer = useRef<HTMLDivElement>(null)
   const [primaryOutput, secondaryOutput] = useStoreState((state: Store) => [
     state.outputs.primary,
     state.outputs.secondary,
   ])
 
-  const setSoundTrackSettings = useStoreActions(
-    (actions) => actions.setSoundTrackSettings
-  )
   const _soundTracksSettings = useStoreState(
     (state: Store) => state.soundTracksSettings
   )
@@ -47,21 +47,12 @@ const AudioCard = (props: AudioCardProps) => {
     }
   }, [_soundTracksSettings, props.path])
 
-  const [showPopover, setShowPopover] = useState<boolean>(false)
-
   const soundTrackVolume = useStoreState(
     (state: Store) => state.soundTrackVolume
   )
 
-  const [isRecordingKeybind, setIsRecordingKeybind] = useState<boolean>(false)
-  const [_recordedHotkeys, _setRecordedHotkeys] = useState<string[]>([])
-  const recordedHotkeys = useRef(_recordedHotkeys)
-  const setRecordedHotkeys = (data: string[]) => {
-    recordedHotkeys.current = data
-    _setRecordedHotkeys(data)
-  }
-
-  const play = () => _play(props, primaryOutput, secondaryOutput, soundTrackVolume)
+  const play = () =>
+    _play(props, primaryOutput, secondaryOutput, soundTrackVolume)
 
   const keybindListener = useRef<any>()
   const playSoundViaPath = (event: any, path: string) => {
@@ -70,7 +61,6 @@ const AudioCard = (props: AudioCardProps) => {
       console.log('Playing sound track from keybind via IPC', props.path)
     }
   }
-
 
   useEffect(() => {
     ipcRenderer.sendSync('set-keybind', {
@@ -88,64 +78,38 @@ const AudioCard = (props: AudioCardProps) => {
     }
   }, [])
 
+
+  const setSoundTrackSettings = useStoreActions(
+    (actions) => actions.setSoundTrackSettings
+  )
+
+  const { setShowPopover, showPopover, options } = useKeybindRecorder({
+    ...props,
+    keybinds: fetchSoundTrackSettings.keybinds,
+    dispatchKeybinds: (keybinds: string[]) => {
+      setSoundTrackSettings({
+        path: props.path,
+        keybinds,
+      })
+    }
+  })
+
   /*
   // for debugging only
   useEffect(() => {
     console.log('changed!', { recordedHotkeys })
   }, [recordedHotkeys]) */
 
-  const logEvent = useCallback((e: globalThis.KeyboardEvent) => {
-    let currentKeys = [...recordedHotkeys.current]
-
-    // check if e.key exists in currentKeys
-    let index = currentKeys.findIndex((key) => key === e.key)
-    if (index === -1) {
-      setRecordedHotkeys([...recordedHotkeys.current, e.key])
-    }
-  }, [])
-
-  const recordKeybind = (stop?: boolean) => {
-    if (stop) {
-      console.log(
-        'Stopped recording hotkey because mouse left popover',
-        "Keybinding also didn't register"
-      )
-      setIsRecordingKeybind(false)
-      setRecordedHotkeys([]) // reset mappings
-      document.removeEventListener('keydown', logEvent)
-
-      return
-    }
-
-    if (!isRecordingKeybind) {
-      setRecordedHotkeys([]) // reset mappings
-      setIsRecordingKeybind(true)
-      document.addEventListener('keydown', logEvent)
-    } else if (isRecordingKeybind) {
-      setIsRecordingKeybind(false)
-      ipcRenderer.sendSync('set-keybind', {
-        path: props.path,
-        keybinds: _recordedHotkeys,
-      })
-      setSoundTrackSettings({
-        path: props.path,
-        keybinds: _recordedHotkeys,
-      })
-
-      console.log('User clicked stop recording:', 'Registered keybind!', {
-        path: props.path,
-        keybinds: _recordedHotkeys,
-      })
-      document.removeEventListener('keydown', logEvent)
-    }
-  }
-
   return (
-    <div className='relative'>
-      <div className='relative flex items-center bg-black border-neutral-700 border rounded-md p-4'>
-        <div className='grid z-10 place-items-center absolute w-full h-full -ml-4 transition-opacity opacity-0 hover:opacity-100 bg-gray-800 rounded-md'>
+    <>
+      <motion.div
+        transition={{ duration: 0.25 }}
+        layoutId={props.path}
+        className='relative flex items-center bg-black border-neutral-700 border rounded-md p-4'
+      >
+        <div className='grid z-[1] place-items-center absolute w-full h-full -ml-4 transition-opacity opacity-0 hover:opacity-100 bg-gray-800 rounded-md'>
           <div
-            className='absolute cursor-pointer inset-0 pointe opacity-0'
+            className='absolute cursor-pointer inset-0 opacity-0'
             onClick={() => play()}
           ></div>
           <div className='grid grid-cols-3 w-full'>
@@ -174,41 +138,42 @@ const AudioCard = (props: AudioCardProps) => {
         <p className='ml-1.5 flex-shrink break-words overflow-ellipsis overflow-hidden whitespace-nowrap'>
           {props.name}
         </p>
-      </div>
-      {showPopover && (
-        <div
-          onMouseLeave={() => recordKeybind(true)}
-          ref={popoverContainer}
-          className='absolute !z-[100] bg-neutral-900 border-neutral-700 border rounded-md transform translate-y-[7rem] bottom-0 p-4 w-56'
-        >
-          <p className='text-sm'>
-            {fetchSoundTrackSettings.keybinds.length > 0 &&
-              !isRecordingKeybind && (
-                <>
-                  <strong>Hotkeys:</strong>{' '}
-                  {fetchSoundTrackSettings.keybinds.join(' ')}
-                </>
-              )}
-            {_recordedHotkeys.length > 0 && isRecordingKeybind && (
-              <>
-                <strong>Recording:</strong> {_recordedHotkeys.join(' ')}
-              </>
-            )}
+      </motion.div>
 
-            {_recordedHotkeys.length === 0 &&
-              fetchSoundTrackSettings.keybinds.length === 0 && (
-                <>
-                  Click to record hotkey <br />
-                  Click again to stop
-                </>
-              )}
-          </p>
-          <Button className='mt-2' onClick={() => recordKeybind(false)}>
-            {isRecordingKeybind ? 'Recording' : 'Set Hotkey'}
-          </Button>
-        </div>
-      )}
-    </div>
+      <Recorder options={options} />
+
+      {/* <AnimatePresence>
+        {showPopover && (
+          <motion.div
+            transition={{ duration: 1 }}
+            className='fixed z-[50] h-screen w-screen top-0 left-0 grid place-items-center'
+          >
+            <motion.div
+              onClick={() => {
+                setShowPopover(false)
+              }}
+              className='absolute bg-gray-500/50 inset-0 top-0 left-0'
+            />
+            <motion.div
+              //onMouseLeave={() => recordKeybind(true)}
+              layoutId={props.path}
+              className='absolute !z-[100] bg-neutral-900 border-neutral-700 border rounded-md p-4 min-w-[30rem]'
+            >
+              <div className='flex justify-between'>
+                <h3 className='heading'>Set a poop</h3>
+                <button
+                  onClick={() => {
+                    setShowPopover(false)
+                  }}
+                >
+                  <XIcon className='w-5 h-5' />
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence> */}
+    </>
   )
 }
 
