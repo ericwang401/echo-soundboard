@@ -24,5 +24,5 @@ jobs:
 
     - name: Build
       run: |
-        npm install
-        npm run electron:build
+        CI=false npm install
+        CI=false npm run electron:build
