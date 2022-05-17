@@ -1,4 +1,4 @@
-name: NodeJS with Webpack
+name: Build Echo From Source
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build-windows:
+  publish-build:
     runs-on: macos-latest
     env:
       CI: false
