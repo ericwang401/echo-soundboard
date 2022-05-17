@@ -11,6 +11,7 @@ jobs:
     runs-on: windows-latest
     env:
       CI: false
+      GH_TOKEN: ${{ secrets.SECRET_GH_TOKEN }}
       
 
     strategy:
