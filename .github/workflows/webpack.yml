@@ -12,6 +12,7 @@ jobs:
     env:
       CI: false
       GH_TOKEN: ${{ secrets.SECRET_GH_TOKEN }}
+      CSC_LINK: ${{ secrets.SECRET_CSC_LINK }}
       
 
     strategy:
