@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      CI: false
+      
 
     strategy:
       matrix:
