@@ -44,7 +44,7 @@
     "eject": "react-scripts eject",
     "electron:watch": "nodemon --exec electron .",
     "electron:dev": "concurrently \"cross-env BROWSER=none npm start\" \"tsc -p src/plugins/electron -w\" \"wait-on http://localhost:3000 && tsc -p src/plugins/electron && npm run electron:watch\"",
-    "electron:pack": "electron-builder -c.extraMetadata.main=build/electron/main.js",
+    "electron:pack": "electron-builder -mwl -c.extraMetadata.main=build/electron/main.js",
     "electron:build": "npm run build && tsc -p src/plugins/electron && npm run electron:pack"
   },
   "eslintConfig": {
