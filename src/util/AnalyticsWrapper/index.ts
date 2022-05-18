@@ -577,4 +577,7 @@ export class GA4 {
   }
 }
 
-export default new GA4();
+const instance = new GA4();
+Object.freeze(instance)
+
+export default instance;
