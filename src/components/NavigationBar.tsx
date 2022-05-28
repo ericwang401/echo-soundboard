@@ -16,7 +16,7 @@ const NavigationBar = () => {
     <>
       <div className='fixed w-full bg-neutral-900 z-[10000] h-[30px] dragging-enabled'>
         <div className='content py-1'>
-          <h3>Echo (Version {mascot.name})</h3>
+          <h3>Echo (Version {ipcRenderer.sendSync('get-version')} {mascot.name})</h3>
         </div>
       </div>
       <div className='h-[30px]'></div>

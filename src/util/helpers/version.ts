@@ -1,6 +1,6 @@
 import Mascot from '@/assets/images/mascot.jpg'
 
 export const mascot = {
-    name: 'Beidou',
+    name: 'Zhongli',
     image: Mascot
 }
