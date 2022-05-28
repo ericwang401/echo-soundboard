@@ -1,16 +1,22 @@
 import { ExtendedAudioElement } from '@/util/AudioDevices'
-import { useStoreState } from 'easy-peasy'
+import { createTypedHooks } from 'easy-peasy'
 import { Store } from '@/state'
 import { useMemo, useEffect } from 'react'
 
+const { useStoreState } = createTypedHooks<Store>()
+
 const useMicrophoneInjector = () => {
-  const [primaryOutput, secondaryOutput, microphone] = useStoreState(
-    (state: Store) => [
-      state.outputs.primary,
-      state.outputs.secondary,
-      state.microphone,
-    ]
-  )
+  const [
+    primaryOutput,
+    secondaryOutput,
+    microphone,
+    microphoneChangeInDecibels,
+  ] = useStoreState((state) => [
+    state.outputs.primary,
+    state.outputs.secondary,
+    state.microphone,
+    state.microphoneChangeInDecibels,
+  ])
 
   const primaryInjector = useMemo(() => new Audio() as ExtendedAudioElement, [])
   const secondaryInjector = useMemo(
@@ -70,12 +76,25 @@ const useMicrophoneInjector = () => {
         // we don't want that, we only want to play on the audio device the user SPECIFIED
         // if the user didn't specify an audio device, then just don't play-simple
         if (primaryOutput === '' && secondaryOutput === '') return
-
         // Create a variable that hooks into the microphone
         let aCtx = new AudioContext()
         let microphone = aCtx.createMediaStreamSource(stream)
         let destination = aCtx.createMediaStreamDestination()
-        microphone.connect(destination)
+
+        if (microphoneChangeInDecibels !== 0) {
+          let gainNode = aCtx.createGain()
+
+          // Connect the microphone to the gain node
+          microphone.connect(gainNode)
+          gainNode.connect(destination)
+
+          //gainNode.gain.value = 10^(dBgain/20)
+          gainNode.gain.value = Math.exp(microphoneChangeInDecibels / 8.6858)
+          console.log('⚠ Enabled microphone gain experimental feature. Applied ' + microphoneChangeInDecibels + ' dB')
+        } else {
+          microphone.connect(destination)
+        }
+
         if (primaryOutput !== '') {
           // Set the output device
           await primaryInjector.setSinkId(primaryOutput)
@@ -100,7 +119,7 @@ const useMicrophoneInjector = () => {
           microphone,
         })
       })
-  }, [primaryOutput, secondaryOutput, microphone])
+  }, [primaryOutput, secondaryOutput, microphone, microphoneChangeInDecibels])
 }
 
 export default useMicrophoneInjector

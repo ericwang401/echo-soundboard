@@ -4,6 +4,7 @@ import storageEngine from '@/state/storageEngine'
 export interface Store {
   outputs: OutputsStore
   microphone: string
+  microphoneChangeInDecibels: number
   fileDirectory: string
   soundTrackVolume: number
   soundTracksSettings: soundTrackSettings[]
@@ -12,6 +13,7 @@ export interface Store {
   setSecondary: Action<Store, string>
   setFileDirectory: Action<Store, string>
   setMicrophone: Action<Store, string>
+  setMicrophoneChangeInDecibels: Action<Store, number>
   setSoundTrackVolume: Action<Store, number>
   setSoundTrackSettings: Action<Store, soundTrackSettings>
   setKeybind: Action<Store, Keybind>
@@ -39,6 +41,7 @@ export const store = createStore<Store>(
       secondary: '',
     },
     microphone: '',
+    microphoneChangeInDecibels: 0,
     soundTrackVolume: 1,
     fileDirectory: '',
     soundTracksSettings: [],
@@ -54,6 +57,9 @@ export const store = createStore<Store>(
     }),
     setMicrophone: action((state, payload: string) => {
       state.microphone = payload
+    }),
+    setMicrophoneChangeInDecibels: action((state, payload: number) => {
+      state.microphoneChangeInDecibels = payload
     }),
     setSoundTrackVolume: action((state, payload: number) => {
       state.soundTrackVolume = payload
