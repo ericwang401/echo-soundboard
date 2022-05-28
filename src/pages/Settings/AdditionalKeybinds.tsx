@@ -6,6 +6,7 @@ import { ipcRenderer } from 'electron'
 import Recorder from '@/components/Recorder'
 import { useKeybindRecorder } from '@/components/KeybindRecorder'
 import { motion } from 'framer-motion'
+import { useMemo } from 'react'
 
 const { useStoreActions, useStoreState } = createTypedHooks<Store>()
 
@@ -14,12 +15,24 @@ const AdditionalKeybinds = () => {
     useStoreState((store) => store.keybinds),
     useStoreActions((actions) => actions.setKeybind),
   ]
+
+  const stopAllSoundsKeybind = useMemo(() => {
+    const index = keybinds.findIndex((keybind) => keybind.name === 'stop-all-sounds')
+
+    console.log('updated', keybinds[index])
+
+    return keybinds[index]
+  }, [keybinds])
+
   const { setShowPopover, options } = useKeybindRecorder({
     identifier: 'stop-all-sounds',
-    keybinds: keybinds['stop-all-sounds'] || [],
+    keybinds: stopAllSoundsKeybind?.keybinds || [],
 
     dispatchKeybinds: (keybinds: string[]) => {
-      ipcRenderer.sendSync('set-keybind', keybinds)
+      ipcRenderer.sendSync('set-keybind', {
+        name: 'stop-all-sounds',
+        keybinds,
+      })
       setKeybinds({
         name: 'stop-all-sounds',
         keybinds,

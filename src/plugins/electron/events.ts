@@ -97,26 +97,33 @@ ipcMain.on('set-sound-keybind', (event, soundTrackSettings: soundTrackSettings) 
   event.returnValue = true
 })
 
-let registeredNormalBindings: string[][] = []
+interface Keybind {
+  name: string,
+  keybinds: string[]
+}
 
-ipcMain.on('set-keybind', (event, keybinds: string[]) => {
+let registeredNormalBindings: Keybind[] = []
+
+ipcMain.on('set-keybind', (event, keybind: Keybind) => {
   // detect if keybind is already registered in registeredNormalBindings
   const index = registeredNormalBindings.findIndex((registeredKeybind) => {
-    return registeredKeybind === keybinds
+    return registeredKeybind.name === keybind.name
   })
 
+  console.log('received keybind', {keybind})
+
   if (index !== -1) {
-    globalShortcut.unregister(registeredNormalBindings[index].join('+'))
+    globalShortcut.unregister(registeredNormalBindings[index].keybinds.join('+'))
 
     registeredNormalBindings = registeredNormalBindings.filter(
       (_, keyIndex) => keyIndex !== index
     )
   }
 
-  if (keybinds.length > 0) {
-    registeredNormalBindings.push(keybinds)
-    globalShortcut.register(keybinds.join('+'), () => {
-      event.reply('trigger-keybind', keybinds.join('+'))
+  if (keybind.keybinds.length > 0) {
+    registeredNormalBindings.push(keybind)
+    globalShortcut.register(keybind.keybinds.join('+'), () => {
+      event.reply('trigger-keybind', keybind.name)
     })
   }
 

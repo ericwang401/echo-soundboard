@@ -13,6 +13,7 @@ import { ExtendedAudioElement } from '@/util/AudioDevices'
 import { useStoreState } from 'easy-peasy'
 import { Store } from '@/state'
 import { ipcRenderer } from 'electron'
+import register from '@/util/registerAdditionalBindings'
 
 const Analytics = () => {
   const location = useLocation()
@@ -51,6 +52,8 @@ const App = () => {
     () => new Audio() as ExtendedAudioElement,
     []
   )
+
+  register()
 
   useEffect(() => {
     console.log('Received microphone config', {

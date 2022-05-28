@@ -578,6 +578,6 @@ export class GA4 {
 }
 
 const instance = new GA4();
-Object.freeze(instance)
+//Object.freeze(instance)
 
 export default instance;
