@@ -19,8 +19,6 @@ const AdditionalKeybinds = () => {
   const stopAllSoundsKeybind = useMemo(() => {
     const index = keybinds.findIndex((keybind) => keybind.name === 'stop-all-sounds')
 
-    console.log('updated', keybinds[index])
-
     return keybinds[index]
   }, [keybinds])
 
