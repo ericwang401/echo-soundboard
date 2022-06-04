@@ -37,3 +37,16 @@ Now everytime you edit, changes will show up. If you install a new package via n
 3. Run `npm run electron:build`
 
 Output file is in `dist/`
+
+## Privacy Policy
+
+Performave collects your data. We use Google Analytics in this product, and we will be upfront about this and just list what we collect here:
+* Location (country, state (if in the USA), city)
+* User engagement
+* Scrolls
+* Clicks
+* Play soundtrack
+* App version
+* Any other data collected by Google and Google Analytics (check their privacy policy for a continuation of this list)
+
+We don't use this information for any commercial means. It's just to help me see if people are actually using this soundboard, and it also makes me happy seeing people using my soundboard.
